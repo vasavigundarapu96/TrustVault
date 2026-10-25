@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Audit Record Details | TrustVault</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        .details-container {
+            max-width: 850px;
+            margin: 45px auto;
+            padding: 25px;
+        }
+
+        .details-back {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #8062a6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .details-card {
+            background: #ffffff;
+            border: 1px solid #e7e2ef;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(45, 32, 66, 0.045);
+        }
+
+        .details-card h1 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #252039;
+        }
+
+        .detail-row {
+            padding: 16px 0;
+            border-bottom: 1px solid #eeeaf4;
+        }
+
+        .detail-label {
+            display: block;
+            margin-bottom: 7px;
+            color: #747187;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .detail-value {
+            color: #252039;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .details-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 11px 20px;
+            border-radius: 8px;
+            background: #8062a6;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .details-button:hover {
+            background: #684b8e;
+        }
+
+        @media (max-width: 600px) {
+            .details-container {
+                margin: 20px auto;
+                padding: 15px;
+            }
+
+            .details-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="details-container">
+
+    <a th:href="@{/audit}" class="details-back">
+        &larr; Back to Audit Trail
+    </a>
+
+    <div class="details-card">
+
+        <h1>Audit Record Details</h1>
+
+        <div class="detail-row">
+            <span class="detail-label">Audit ID</span>
+            <div class="detail-value" th:text="${auditLog.id}">1</div>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">User Email</span>
+            <div class="detail-value" th:text="${auditLog.actorEmail}">
+                user@example.com
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">User ID</span>
+            <div class="detail-value" th:text="${auditLog.actorUserId}">
+                1
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Action</span>
+            <div class="detail-value" th:text="${auditLog.action}">
+                UPLOAD
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Outcome</span>
+            <div class="detail-value" th:text="${auditLog.outcome}">
+                SUCCESS
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Full Details</span>
+            <div class="detail-value"
+                 th:text="${auditLog.details != null ? auditLog.details : 'No additional details available.'}">
+                Document uploaded
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Date and Time</span>
+            <div class="detail-value"
+                 th:text="${auditLog.createdAt != null ? #temporals.format(auditLog.createdAt, 'dd MMMM yyyy, hh:mm:ss a') : '-'}">
+                25 October 2026, 10:30:00 AM
+            </div>
+        </div>
+
+        <a th:href="@{/audit}" class="details-button">
+            Back to Audit Trail
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

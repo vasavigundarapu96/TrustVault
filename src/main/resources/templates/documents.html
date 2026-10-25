@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault | My Documents</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="documents-page">
+<div class="app-layout">
+
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+        <a class="brand" th:href="@{/}">
+            <span class="brand-icon">✓</span>
+            TrustVault
+        </a>
+
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <nav class="sidebar-nav">
+            <a th:href="@{/}" class="sidebar-link">
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a th:href="@{/documents}" class="sidebar-link active">
+                <span class="nav-icon">▤</span>
+                My Documents
+            </a>
+
+            <a th:href="@{/documents/shared}" class="sidebar-link">
+                <span class="nav-icon">♧</span>
+                Shared With Me
+            </a>
+            
+             <!-- Profile -->
+    <a th:href="@{/profile}"
+       class="sidebar-link">
+        <span class="nav-icon">👤</span>
+        Profile
+    </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-security">
+                <span class="security-icon">♧</span>
+                <strong>Your files are private</strong>
+                <p>Access is controlled by document permissions.</p>
+            </div>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="sidebar-link logout-link">
+                    <span class="nav-icon">↪</span>
+                    Logout
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="content-topbar">
+            <div class="breadcrumb">
+                <span>Workspace</span>
+                <span class="breadcrumb-separator">/</span>
+                <strong>My Documents</strong>
+            </div>
+
+            <div class="topbar-status">
+                <span class="status-dot"></span>
+                Private workspace
+            </div>
+        </header>
+
+        <div class="content-inner">
+            <section class="page-heading">
+                <div>
+                    <p class="eyebrow">DOCUMENT WORKSPACE</p>
+                    <h1>My Documents</h1>
+                    <p class="page-subtitle">Upload, organize and securely share your files.</p>
+                </div>
+
+                <a href="#upload-section" class="button">
+                    <span>＋</span> Upload Document
+                </a>
+            </section>
+
+            <!-- Success and error messages -->
+            <p class="alert success" th:if="${success}" th:text="${success}"></p>
+            <p class="alert error" th:if="${error}" th:text="${error}"></p>
+
+            <!-- Upload and Search Panels -->
+            <section class="workspace-grid">
+
+                <!-- Upload Panel -->
+                <div class="panel upload-panel" id="upload-section">
+                    <div class="panel-heading">
+                        <div class="panel-icon upload-icon">↑</div>
+                        <div>
+                            <h2>Upload a document</h2>
+                            <p>Add a new file to your private vault.</p>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/documents/upload}" method="post"
+                          enctype="multipart/form-data" class="upload-form">
+
+                        <div class="form-field">
+                            <label for="title">Document title</label>
+                            <input id="title" type="text" name="title" maxlength="200"
+                                   placeholder="Enter document title" required>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="description">
+                                Description <span class="optional">(optional)</span>
+                            </label>
+                            <textarea id="description" name="description" rows="2"
+                                      maxlength="1000"
+                                      placeholder="What is this document about?"></textarea>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="file">Choose a file</label>
+                            <input id="file" type="file" name="file"
+                                   accept=".pdf,.png,.jpg,.jpeg,.txt" required>
+                            <small class="field-help">PDF, PNG, JPG or TXT · Maximum 10 MB</small>
+                        </div>
+
+                        <button class="button upload-submit" type="submit">
+                            Upload Document
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Search Panel -->
+                <div class="panel search-panel">
+                    <div class="panel-heading">
+                        <div class="panel-icon search-icon">⌕</div>
+                        <div>
+                            <h2>Search documents</h2>
+                            <p>Find a file by its title.</p>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/documents}" method="get" class="search-form">
+                        <label for="keyword">Document title</label>
+                        <input id="keyword" type="search" name="keyword"
+                               placeholder="Search by title..." th:value="${keyword}">
+
+                        <div class="search-actions">
+                            <button class="button" type="submit">Search</button>
+                            <a class="button button-secondary" th:href="@{/documents}">Clear</a>
+                        </div>
+                    </form>
+
+                    <div class="search-tip">
+                        <span>ⓘ</span>
+                        Search only includes documents you own.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Documents Table -->
+            <section class="panel files-panel">
+                <div class="files-heading">
+                    <div>
+                        <h2>Your files</h2>
+                        <p>Manage the documents stored in your vault.</p>
+                    </div>
+
+                    <span class="file-count"
+                          th:text="${#lists.size(documents)} + ' files'">0 files</span>
+                </div>
+
+                <div class="empty-state" th:if="${#lists.isEmpty(documents)}">
+                    <span class="empty-icon">▤</span>
+                    <strong>No documents found</strong>
+                    <span>Upload a document or try another search.</span>
+                </div>
+
+                <div class="table-wrapper" th:unless="${#lists.isEmpty(documents)}">
+                    <table class="documents-table">
+                        <thead>
+                        <tr>
+                            <th>DOCUMENT</th>
+                            <th>DESCRIPTION</th>
+                            <th>UPLOADED</th>
+                            <th>OWNER</th>
+                            <th class="actions-heading">ACTIONS</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="doc : ${documents}">
+                            <td>
+                                <div class="file-name-cell">
+                                    <span class="file-type-icon">▤</span>
+                                    <div class="file-name-text">
+                                        <strong th:text="${doc.title}">Document title</strong>
+                                        <small>Private document</small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="description-text"
+                                      th:if="${doc.description != null and !doc.description.isBlank()}"
+                                      th:text="${doc.description}">Description</span>
+                                <span class="muted-text"
+                                      th:if="${doc.description == null or doc.description.isBlank()}">
+                                    No description
+                                </span>
+                            </td>
+
+                            <td class="date-cell">
+                                <span th:if="${doc.uploadedAt != null}"
+                                      th:text="${#temporals.format(doc.uploadedAt, 'dd MMM yyyy')}">
+                                    24 Oct 2026
+                                </span>
+                                <span th:if="${doc.uploadedAt == null}">—</span>
+                                <small th:if="${doc.uploadedAt != null}"
+                                       th:text="${#temporals.format(doc.uploadedAt, 'HH:mm')}">10:30</small>
+                            </td>
+
+                            <td><span class="owner-badge">You</span></td>
+
+                            <td>
+                                <div class="table-actions">
+                                    <!-- Download -->
+                                    <a class="icon-button download-action"
+                                       th:href="@{/documents/{id}/download(id=${doc.id})}"
+                                       title="Download document" aria-label="Download document">↓</a>
+
+                                    <!-- Share: owner only -->
+                                    <form th:if="${ownedDocumentIds.contains(doc.id)}"
+                                          th:action="@{/documents/{id}/share(id=${doc.id})}"
+                                          method="post" class="table-share-form">
+                                        <input type="email" name="recipientEmail"
+                                               placeholder="Recipient email"
+                                               aria-label="Recipient email" required>
+                                        <select name="permissionType" aria-label="Permission type" required>
+                                            <option value="READ">READ</option>
+                                            <option value="EDIT">EDIT</option>
+                                        </select>
+                                        <button class="icon-button share-action" type="submit"
+                                                title="Share document" aria-label="Share document">↗</button>
+                                    </form>
+
+                                    <!-- Delete: owner only -->
+                                    <form th:if="${ownedDocumentIds.contains(doc.id)}"
+                                          th:action="@{/documents/{id}/delete(id=${doc.id})}"
+                                          method="post"
+                                          onsubmit="return confirm('Delete this document?');">
+                                        <button class="icon-button delete-action" type="submit"
+                                                title="Delete document" aria-label="Delete document">♲</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <footer class="page-footer">
+                <span>TrustVault</span>
+                <span>Secure document management</span>
+            </footer>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TrustVault | Shared With Me</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="documents-page">
+
+    <!-- Hamburger menu checkbox -->
+    <input
+        type="checkbox"
+        id="menu-toggle"
+        class="menu-checkbox"
+    >
+
+    <!-- Three-line hamburger button -->
+    <label
+        for="menu-toggle"
+        class="menu-button"
+        aria-label="Toggle navigation menu"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+
+    <!-- Overlay closes the sidebar when clicked -->
+    <label
+        for="menu-toggle"
+        class="menu-overlay"
+        aria-label="Close navigation menu"
+    ></label>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <span class="brand-icon">T</span>
+            <span>TrustVault</span>
+        </div>
+
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <nav class="sidebar-nav">
+
+            <a th:href="@{/dashboard}" class="sidebar-link">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a th:href="@{/documents}" class="sidebar-link">
+                <span class="nav-icon">▤</span>
+                <span>My Documents</span>
+            </a>
+            
+    
+
+            <a
+                th:href="@{/documents/shared}"
+                class="sidebar-link active"
+            >
+                <span class="nav-icon">⇄</span>
+                <span>Shared With Me</span>
+            </a>
+            
+                     <!-- Profile -->
+    <a th:href="@{/profile}"
+       class="sidebar-link">
+        <span class="nav-icon">👤</span>
+        Profile
+    </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-security">
+                <span class="security-icon">🔒</span>
+                <strong>Your files are private</strong>
+                <p>
+                    Access is controlled by document permissions.
+                </p>
+            </div>
+
+            <form th:action="@{/logout}" method="post">
+                <button
+                    type="submit"
+                    class="button button-secondary"
+                    style="width: 100%;"
+                >
+                    Logout
+                </button>
+            </form>
+
+        </div>
+
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+        <!-- Top bar -->
+        <header class="content-topbar">
+
+            <div class="breadcrumb">
+                <span>Workspace</span>
+                <span class="breadcrumb-separator">/</span>
+                <strong>Shared With Me</strong>
+            </div>
+
+            <div class="topbar-status">
+                <span class="status-dot"></span>
+                <span>Private workspace</span>
+            </div>
+
+        </header>
+
+        <!-- Page content -->
+        <div class="content-inner">
+
+            <!-- Heading -->
+            <section class="page-heading">
+
+                <div>
+                    <p class="eyebrow">DOCUMENT WORKSPACE</p>
+
+                    <h1>Shared With Me</h1>
+
+                    <p class="page-subtitle">
+                        Access documents that other users have shared with you.
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- Success message -->
+            <div
+                th:if="${success}"
+                class="alert success"
+                th:text="${success}"
+            ></div>
+
+            <!-- Error message -->
+            <div
+                th:if="${error}"
+                class="alert error"
+                th:text="${error}"
+            ></div>
+
+            <!-- Search panel -->
+            <section class="panel" style="margin-top: 0;">
+
+                <div class="panel-heading">
+                    <div>
+                        <h2>Search documents</h2>
+                        <p>Find documents shared with your account.</p>
+                    </div>
+                </div>
+
+                <form
+                    th:action="@{/documents/shared}"
+                    method="get"
+                    class="search-form"
+                >
+
+                    <label for="keyword">
+                        Document title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="keyword"
+                        name="keyword"
+                        placeholder="Search by document title"
+                        th:value="${keyword}"
+                    >
+
+                    <div class="search-actions">
+
+                        <button
+                            type="submit"
+                            class="button"
+                        >
+                            Search
+                        </button>
+
+                        <a
+                            th:href="@{/documents/shared}"
+                            class="button button-secondary"
+                        >
+                            Clear
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+            <!-- Shared documents panel -->
+            <section class="files-panel" style="margin-top: 22px;">
+
+                <div class="files-heading">
+
+                    <div>
+                        <h2>Shared documents</h2>
+                        <p>
+                            Documents other users have shared with you.
+                        </p>
+                    </div>
+
+                    <span
+                        class="file-count"
+                        th:text="${#lists.size(documents)} + ' files'"
+                    >
+                        0 files
+                    </span>
+
+                </div>
+
+                <!-- Empty state -->
+                <div
+                    th:if="${#lists.isEmpty(documents)}"
+                    class="empty-state"
+                >
+                    <span class="empty-icon">▤</span>
+
+                    <strong>No shared documents found</strong>
+
+                    <span>
+                        Documents shared with you will appear here.
+                    </span>
+                </div>
+
+                <!-- Documents table -->
+                <div
+                    class="table-wrapper"
+                    th:unless="${#lists.isEmpty(documents)}"
+                >
+
+                    <table class="documents-table">
+
+                        <thead>
+                            <tr>
+                                <th>Document</th>
+                                <th>Shared By</th>
+                                <th>Date Uploaded</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="doc : ${documents}">
+
+                                <!-- Document details -->
+                                <td>
+                                    <div class="file-name-cell">
+
+                                        <span class="file-type-icon">
+                                            ▤
+                                        </span>
+
+                                        <div class="file-name-text">
+
+                                            <strong
+                                                th:text="${doc.title}"
+                                            >
+                                                Document title
+                                            </strong>
+
+                                            <small
+                                                class="description-text"
+                                                th:text="${doc.description != null and !doc.description.isBlank() ? doc.description : 'No description provided'}"
+                                            >
+                                                Document description
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <!-- Owner -->
+                                <td>
+                                    <span
+                                        class="owner-badge"
+                                        th:if="${doc.owner != null}"
+                                        th:text="${doc.owner.email}"
+                                    >
+                                        owner@example.com
+                                    </span>
+
+                                    <span
+                                        class="muted-text"
+                                        th:unless="${doc.owner != null}"
+                                    >
+                                        Unknown owner
+                                    </span>
+                                </td>
+
+                                <!-- Upload date -->
+                                <td class="date-cell">
+
+                                    <span
+                                        th:if="${doc.uploadedAt != null}"
+                                        th:text="${#temporals.format(doc.uploadedAt, 'dd MMM yyyy')}"
+                                    >
+                                        01 Jan 2026
+                                    </span>
+
+                                    <span
+                                        class="muted-text"
+                                        th:unless="${doc.uploadedAt != null}"
+                                    >
+                                        —
+                                    </span>
+
+                                </td>
+
+                                <!-- Download action -->
+                                <td>
+                                    <a
+                                        class="button"
+                                        th:href="@{/documents/{id}/download(id=${doc.id})}"
+                                    >
+                                        Download
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+            <!-- Footer -->
+            <footer class="page-footer">
+                <span>TrustVault</span>
+                <span>Your documents, securely managed.</span>
+            </footer>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Audit Trail | TrustVault</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        .audit-content {
+            padding: 30px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .audit-heading {
+            margin-bottom: 25px;
+        }
+
+        .audit-heading h1 {
+            color: #252039;
+            margin-bottom: 8px;
+        }
+
+        .audit-heading p {
+            color: #747187;
+        }
+
+        .audit-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #8062a6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .audit-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            background: #ffffff;
+            border: 1px solid #e7e2ef;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(45, 32, 66, 0.045);
+        }
+
+        .audit-table {
+            width: 100%;
+            min-width: 950px;
+            border-collapse: collapse;
+        }
+
+        .audit-table th,
+        .audit-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eeeaf4;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .audit-table th {
+            background: #f5f1fa;
+            color: #684b8e;
+        }
+
+        .audit-table td {
+            color: #514b62;
+        }
+
+        .audit-table tbody tr:hover {
+            background: #faf8fd;
+        }
+
+        .audit-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #f0eaf8;
+            color: #684b8e;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .audit-view-button {
+            display: inline-block;
+            padding: 9px 15px;
+            border-radius: 8px;
+            background: #8062a6;
+            color: #ffffff !important;
+            text-decoration: none;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        .audit-view-button:hover {
+            background: #684b8e;
+        }
+
+        .audit-empty {
+            padding: 35px;
+            text-align: center !important;
+            color: #747187;
+        }
+
+        @media (max-width: 600px) {
+            .audit-content {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="audit-content">
+
+    <a th:href="@{/dashboard}" class="audit-back">
+        &larr; Back to Dashboard
+    </a>
+
+    <div class="audit-heading">
+        <h1>Audit Trail</h1>
+        <p>
+            Monitor document activities and review recorded events
+            in TrustVault.
+        </p>
+    </div>
+
+    <p th:if="${param.notFound}" style="color: #b42318;">
+        The requested audit record could not be found.
+    </p>
+
+    <div class="audit-table-wrapper">
+
+        <table class="audit-table">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User Email</th>
+                    <th>Action</th>
+                    <th>Outcome</th>
+                    <th>Details</th>
+                    <th>Date &amp; Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr th:each="log : ${auditLogs}">
+
+                    <td th:text="${log.id}">1</td>
+
+                    <td th:text="${log.actorEmail}">
+                        user@example.com
+                    </td>
+
+                    <td th:text="${log.action}">
+                        UPLOAD
+                    </td>
+
+                    <td>
+                        <span class="audit-status"
+                              th:text="${log.outcome}">
+                            SUCCESS
+                        </span>
+                    </td>
+
+                    <td th:text="${log.details != null ? log.details : '-'}">
+                        Document uploaded
+                    </td>
+
+                    <td th:text="${log.createdAt != null ? #temporals.format(log.createdAt, 'dd MMM yyyy, hh:mm a') : '-'}">
+                        25 Oct 2026, 10:30 AM
+                    </td>
+
+                    <td>
+                        <a th:href="@{/audit/{id}(id=${log.id})}"
+                           class="audit-view-button">
+                            View Details
+                        </a>
+                    </td>
+
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(auditLogs)}">
+                    <td colspan="7" class="audit-empty">
+                        No audit records found yet.
+                        Activities will appear here when recorded.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

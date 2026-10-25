@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault | Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="auth-container">
+    <section class="auth-card">
+        <a class="brand auth-brand" th:href="@{/}">TrustVault</a>
+
+        <p class="eyebrow">CREATE YOUR ACCOUNT</p>
+        <h1>Join TrustVault</h1>
+        <p>Create an account to manage and share documents securely.</p>
+
+        <p class="alert error"
+           th:if="${error}"
+           th:text="${error}"></p>
+
+        <form th:action="@{/register}"
+              method="post"
+              class="form-grid">
+
+            <label for="name">Full name</label>
+            <input id="name"
+                   type="text"
+                   name="name"
+                   maxlength="100"
+                   autocomplete="name"
+                   required>
+
+            <label for="email">Email address</label>
+            <input id="email"
+                   type="email"
+                   name="email"
+                   maxlength="150"
+                   autocomplete="email"
+                   required>
+
+            <label for="password">Password</label>
+            <input type="password"
+                   id="password"
+                   name="password"
+                   minlength="8"
+                   maxlength="8"
+                   pattern="(?=.*[A-Za-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s])\S{8}"
+                   title="Password must be exactly 8 characters and contain a letter, a digit, and a special character."
+                   placeholder="Enter 8-character password"
+                   autocomplete="new-password"
+                   required>
+
+            <!-- Recovery question -->
+            <label for="recoveryQuestion">Recovery question</label>
+            <select id="recoveryQuestion"
+                    name="recoveryQuestion"
+                    required>
+                <option value="" disabled selected>
+                    Select a recovery question
+                </option>
+                <option value="What is the name of your first school?">
+                    What is the name of your first school?
+                </option>
+                <option value="What is your childhood nickname?">
+                    What is your childhood nickname?
+                </option>
+                <option value="What is the name of your favorite teacher?">
+                    What is the name of your favorite teacher?
+                </option>
+                <option value="What city were you born in?">
+                    What city were you born in?
+                </option>
+                <option value="What was the name of your first pet?">
+                    What was the name of your first pet?
+                </option>
+            </select>
+
+            <!-- Recovery answer -->
+            <label for="recoveryAnswer">Recovery answer</label>
+            <input id="recoveryAnswer"
+                   type="password"
+                   name="recoveryAnswer"
+                   maxlength="100"
+                   autocomplete="off"
+                   placeholder="Enter your answer"
+                   required>
+
+            <p>
+                Remember your answer. You will need it if you forget
+                your password.
+            </p>
+
+            <button class="button" type="submit">
+                Create Account
+            </button>
+        </form>
+
+        <p class="auth-footer">
+            Already registered?
+            <a th:href="@{/login}">Sign in</a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

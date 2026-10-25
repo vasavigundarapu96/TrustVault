@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+target/
+.classpath
+.project
+.settings/
+.metadata/
+trustvault-files/
+.env
+application-local.properties
+
+trustvault-files/
+application-local.properties

@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | TrustVault</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f3f5fb;
+            color: #243047;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 75px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            box-shadow: 0 2px 12px rgba(25, 35, 70, 0.07);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 750;
+            color: #5145cd;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: #25334d;
+        }
+
+        .topbar-label {
+            color: #778198;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 45px auto;
+            padding: 0 22px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 30px;
+            color: #202b45;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #7b8499;
+            font-size: 15px;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 290px 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .profile-card,
+        .details-card {
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(35, 46, 90, 0.06);
+            border: 1px solid #e9ecf5;
+        }
+
+        .profile-card {
+            padding: 35px 25px;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 18px;
+            background: linear-gradient(135deg, #6558e8, #9286ff);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            font-weight: 700;
+            box-shadow: 0 7px 18px rgba(101, 88, 232, 0.25);
+        }
+
+        .profile-card h2 {
+            font-size: 21px;
+            margin-bottom: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-card .email {
+            color: #81899c;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 22px;
+            padding: 7px 15px;
+            border-radius: 20px;
+            background: #e8f8ef;
+            color: #21834c;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .details-card {
+            padding: 30px;
+        }
+
+        .details-heading {
+            padding-bottom: 22px;
+            border-bottom: 1px solid #edf0f6;
+            margin-bottom: 8px;
+        }
+
+        .details-heading h2 {
+            font-size: 20px;
+            margin-bottom: 7px;
+        }
+
+        .details-heading p {
+            color: #858da0;
+            font-size: 13px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 21px 0;
+            border-bottom: 1px solid #f0f2f7;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #7d879c;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            color: #29354f;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 7px;
+            background: #eeecff;
+            color: #5b4bd8;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #5849d6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4536bd;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: #46516a;
+            border: 1px solid #dfe3ef;
+        }
+
+        .btn-secondary:hover {
+            background: #f4f5fb;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #9aa2b4;
+            font-size: 12px;
+        }
+
+        @media (max-width: 700px) {
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .topbar-label {
+                display: none;
+            }
+
+            .container {
+                margin: 30px auto;
+            }
+
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .details-card {
+                padding: 22px;
+            }
+
+            .page-heading h1 {
+                font-size: 26px;
+            }
+
+            .detail-row {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="logo">Trust<span>Vault</span></div>
+        <div class="topbar-label">Your secure document workspace</div>
+    </header>
+
+    <main class="container">
+
+        <div class="page-heading">
+            <h1>My Profile</h1>
+            <p>View your account information and profile details.</p>
+        </div>
+
+        <div class="profile-layout">
+
+            <section class="profile-card">
+                <div class="avatar"
+                     th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">
+                    U
+                </div>
+
+                <h2 th:text="${user.name}">User Name</h2>
+
+                <p class="email" th:text="${user.email}">
+                    user@example.com
+                </p>
+
+                <span class="status"
+                      th:text="${user.enabled ? '● Active Account' : '● Disabled Account'}">
+                    ● Active Account
+                </span>
+            </section>
+
+            <section class="details-card">
+
+                <div class="details-heading">
+                    <h2>Account Information</h2>
+                    <p>Your registered TrustVault account details.</p>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Full Name</span>
+                    <span class="detail-value" th:text="${user.name}">
+                        User Name
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Email Address</span>
+                    <span class="detail-value" th:text="${user.email}">
+                        user@example.com
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Account Role</span>
+                    <span class="detail-value">
+                        <span class="role-badge" th:text="${user.role}">
+                            VIEWER
+                        </span>
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Account Status</span>
+                    <span class="detail-value"
+                          th:text="${user.enabled ? 'Active' : 'Disabled'}">
+                        Active
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Registered On</span>
+                    <span class="detail-value"
+                          th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy, hh:mm a')}">
+                        24 Oct 2026
+                    </span>
+                </div>
+
+                <div class="actions">
+                    <a th:href="@{/}" class="btn btn-primary">
+                        ← Back to Dashboard
+                    </a>
+                    <a th:href="@{/logout}" class="btn btn-secondary">
+                        Logout
+                    </a>
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        © 2026 TrustVault. Your documents, protected.
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault | Verify Recovery</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="auth-container">
+    <section class="auth-card">
+        <a class="brand auth-brand" th:href="@{/login}">TrustVault</a>
+        <p class="eyebrow">VERIFY YOUR IDENTITY</p>
+        <h1>Recovery question</h1>
+        <p>Answer the question you selected when registering.</p>
+
+        <p class="alert error" th:if="${error}" th:text="${error}"></p>
+
+        <form th:action="@{/verify-recovery}"
+              method="post" class="form-grid">
+
+            <label for="recoveryQuestion">Your recovery question</label>
+            <p id="recoveryQuestion"
+               th:text="${recoveryQuestion}"></p>
+
+            <label for="recoveryAnswer">Your answer</label>
+            <input id="recoveryAnswer"
+                   type="password"
+                   name="recoveryAnswer"
+                   maxlength="100"
+                   autocomplete="off"
+                   required>
+
+            <button class="button" type="submit">
+                Verify Answer
+            </button>
+        </form>
+
+        <p class="auth-footer">
+            <a th:href="@{/forgot-password}">Start again</a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

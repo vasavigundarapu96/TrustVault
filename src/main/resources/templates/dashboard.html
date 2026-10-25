@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault | Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="documents-page">
+
+    <!-- Hamburger Menu -->
+    <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+
+    <label for="menu-toggle"
+           class="menu-button"
+           aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+
+    <label for="menu-toggle"
+           class="menu-overlay"
+           aria-label="Close navigation menu">
+    </label>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <span class="brand-icon">T</span>
+            <span>TrustVault</span>
+        </div>
+
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <nav class="sidebar-nav">
+
+            <a th:href="@{/dashboard}"
+               class="sidebar-link active">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a th:href="@{/documents}"
+               class="sidebar-link">
+                <span class="nav-icon">▤</span>
+                <span>My Documents</span>
+            </a>
+
+            <a th:href="@{/documents/shared}"
+               class="sidebar-link">
+                <span class="nav-icon">⇄</span>
+                <span>Shared With Me</span>
+            </a>
+
+            <a th:href="@{/profile}"
+               class="sidebar-link"
+               th:classappend="${currentPage == 'profile'} ? ' active' : ''">
+                <span class="nav-icon">👤</span>
+                <span>Profile</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-security">
+                <span class="security-icon">🔒</span>
+                <strong>Your files are private</strong>
+                <p>Access is controlled by document permissions.</p>
+            </div>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit"
+                        class="button button-secondary"
+                        style="width: 100%;">
+                    Logout
+                </button>
+            </form>
+
+        </div>
+
+    </aside>
+
+    <!-- Main Dashboard -->
+    <main class="main-content">
+
+        <!-- Top Navigation Bar -->
+        <header class="content-topbar">
+
+            <div class="breadcrumb">
+                <span>Workspace</span>
+                <span class="breadcrumb-separator">/</span>
+                <strong>Dashboard</strong>
+            </div>
+
+            <div class="topbar-status">
+                <span class="status-dot"></span>
+                <span>Private workspace</span>
+            </div>
+
+        </header>
+
+        <div class="content-inner">
+
+            <!-- Welcome Section -->
+            <section class="page-heading">
+
+                <div>
+                    <p class="eyebrow">YOUR PRIVATE WORKSPACE</p>
+
+                    <h1>Welcome to TrustVault</h1>
+
+                    <p class="page-subtitle">
+                        Manage your documents securely and share them with control.
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- Dashboard Cards -->
+            <section class="feature-grid">
+
+                <!-- My Documents -->
+                <article class="feature-card">
+
+                    <h2>My Documents</h2>
+
+                    <p>
+                        Total documents uploaded by you.
+                    </p>
+
+                    <a th:href="@{/documents}"
+                       class="button">
+                        Manage Documents
+                    </a>
+
+                </article>
+
+                <!-- Shared With Me -->
+                <article class="feature-card">
+
+                    <h2>Shared With Me</h2>
+
+                    <p>
+                        Documents shared with your account.
+                    </p>
+
+                    <a th:href="@{/documents/shared}"
+                       class="button button-secondary">
+                        View Shared Files
+                    </a>
+
+                </article>
+
+                <!-- Secure Storage -->
+                <article class="feature-card">
+
+                    <h2>Secure Storage</h2>
+
+                    <p>
+                        Keep uploaded files in private server-side storage.
+                    </p>
+
+                    <a th:href="@{/documents}"
+                       class="button button-secondary">
+                        Upload Documents
+                    </a>
+
+                </article>
+
+            </section>
+
+            <!-- Workspace Overview -->
+            <section class="panel" style="margin-top: 24px;">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h2>Workspace Overview</h2>
+
+                        <p>
+                            Everything you need to manage your documents.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="feature-grid">
+
+                    <!-- Private Documents -->
+                    <article class="feature-card">
+
+                        <h2>Private Documents</h2>
+
+                        <p>
+                            Your uploaded documents are managed separately
+                            from files shared by other users.
+                        </p>
+
+                        <a th:href="@{/documents}"
+                           class="button button-secondary">
+                            View My Files
+                        </a>
+
+                    </article>
+
+                    <!-- Controlled Sharing -->
+                    <article class="feature-card">
+
+                        <h2>Controlled Sharing</h2>
+
+                        <p>
+                            Share documents with specific users according
+                            to the permissions supported by your application.
+                        </p>
+
+                        <a th:href="@{/documents}"
+                           class="button button-secondary">
+                            Manage Sharing
+                        </a>
+
+                    </article>
+
+                    <!-- Audit Trail -->
+                    <article class="feature-card">
+
+                        <h2>Audit Trail</h2>
+
+                        <p>
+                            Review document activities, user actions,
+                            outcomes, and recorded timestamps.
+                        </p>
+
+                        <a th:href="@{/audit}"
+                           class="button">
+                            View Audit Trail
+                        </a>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+            <!-- Footer -->
+            <footer class="page-footer">
+
+                <span>TrustVault</span>
+                <span>Your documents, securely managed.</span>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
